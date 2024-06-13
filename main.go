@@ -6,7 +6,7 @@ import (
 	"db/controller"
 	"db/dao"
 	"fmt"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -20,10 +20,10 @@ var userDao *dao.UserDAO
 
 func init() {
 	// Load environment variables from .env file
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatalf("Error loading .env file: %v", err)
+	// }
 	// // ①-1
 	mysqlUser := os.Getenv("MYSQL_USER")
     mysqlPwd := os.Getenv("MYSQL_PWD")
@@ -52,7 +52,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
-	
 	switch r.Method {
 	case http.MethodOptions:
 		return 
