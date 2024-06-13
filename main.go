@@ -6,7 +6,7 @@ import (
 	"db/controller"
 	"db/dao"
 	"fmt"
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -20,15 +20,16 @@ var userDao *dao.UserDAO
 
 func init() {
 	// Load environment variables from .env file
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Fatalf("Error loading .env file: %v", err)
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
 	// // ①-1
 	mysqlUser := os.Getenv("MYSQL_USER")
     mysqlPwd := os.Getenv("MYSQL_PWD")
     mysqlHost := os.Getenv("MYSQL_HOST")
     mysqlDatabase := os.Getenv("MYSQL_DATABASE")
+	fmt.Println(mysqlDatabase)
 
     connStr := fmt.Sprintf("%s:%s@%s/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
     _db, err := sql.Open("mysql", connStr)
@@ -48,7 +49,13 @@ func init() {
 
 // ② /userでリクエストされたらnameパラメーターと一致する名前を持つレコードをJSON形式で返す
 func handler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	
 	switch r.Method {
+	case http.MethodOptions:
+		return 
 	case http.MethodGet:
 		controller.SearchUserController(w, r, db)
 	case http.MethodPost:

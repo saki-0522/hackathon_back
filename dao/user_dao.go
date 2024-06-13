@@ -36,14 +36,16 @@ func NewUserDAO(db *sql.DB) *UserDAO {
 	return &UserDAO{DB: db}
 }
 
-func GetUserByName(db *sql.DB, name string) ([]model.UserResForHTTPGet, error) {
+// func GetUserByName(db *sql.DB, name string) ([]model.UserResForHTTPGet, error) {
+func GetUserById(db *sql.DB, uid string) ([]model.UserResForHTTPGet, error) {
 	tx, err := db.Begin()
 	if err != nil {
 		log.Printf("fail: db.Begin(), %v\n", err)
 		return nil, err
 	}
 	defer HandleTransaction(tx, err)
-	rows, err := tx.Query("SELECT id, name, age FROM user WHERE name = ?", name)
+	// rows, err := tx.Query("SELECT id, name, age FROM user WHERE name = ?", name)
+	rows, err := tx.Query("SELECT id, name, age FROM user WHERE id = ?", uid)
 	if err != nil {
 		log.Printf("fail: tx.Query, %v\n", err)
 		return nil, err

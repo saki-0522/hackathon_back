@@ -23,13 +23,13 @@ func SearchUserController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	}
 
 	// users, err := usecase.SearchUser(db, name)
-	users, err := usecase.SearchUser(db, uid)
+	user, err := usecase.SearchUser(db, uid)
 	if err != nil {
 		log.Printf("fail: usecase.SearchUser, %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	bytes, err := json.Marshal(users)
+	bytes, err := json.Marshal(user)
 	if err != nil {
 		log.Printf("fail: json.Marshal, %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
