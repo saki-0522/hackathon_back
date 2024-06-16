@@ -3,10 +3,10 @@ package dao
 import (
 	"database/sql"
 	"db/model"
-	"github.com/oklog/ulid/v2"
+	// "github.com/oklog/ulid/v2"
 	"log"
-	"math/rand"
-	"time"
+	// "math/rand"
+	// "time"
 )
 
 func HandleTransaction(tx *sql.Tx, err error) {
@@ -36,7 +36,6 @@ func NewUserDAO(db *sql.DB) *UserDAO {
 	return &UserDAO{DB: db}
 }
 
-// func GetUserByName(db *sql.DB, name string) ([]model.UserResForHTTPGet, error) {
 func GetUserById(db *sql.DB, uid string) ([]model.UserResForHTTPGet, error) {
 	tx, err := db.Begin()
 	if err != nil {
@@ -44,8 +43,7 @@ func GetUserById(db *sql.DB, uid string) ([]model.UserResForHTTPGet, error) {
 		return nil, err
 	}
 	defer HandleTransaction(tx, err)
-	// rows, err := tx.Query("SELECT id, name, age FROM user WHERE name = ?", name)
-	rows, err := tx.Query("SELECT id, name, age FROM user WHERE id = ?", uid)
+	rows, err := tx.Query("SELECT id, name, email FROM user WHERE id = ?", uid)
 	if err != nil {
 		log.Printf("fail: tx.Query, %v\n", err)
 		return nil, err
@@ -55,7 +53,7 @@ func GetUserById(db *sql.DB, uid string) ([]model.UserResForHTTPGet, error) {
 	users := make([]model.UserResForHTTPGet, 0)
 	for rows.Next() {
 		var u model.UserResForHTTPGet
-		if err := rows.Scan(&u.Id, &u.Name, &u.Age); err != nil {
+		if err := rows.Scan(&u.Id, &u.Name, &u.Email); err != nil {
 			return nil, err
 		}
 		users = append(users, u)
@@ -73,15 +71,15 @@ func CreateUser(db *sql.DB) (string, error) {
 	defer HandleTransaction(tx, err)
 
 	// IDの生成
-	t := time.Now()
-	entropy := ulid.Monotonic(rand.New(rand.NewSource(t.UnixNano())), 0)
-	id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
+	// t := time.Now()
+	// entropy := ulid.Monotonic(rand.New(rand.NewSource(t.UnixNano())), 0)
+	// id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
 
-	_, err = tx.Exec("INSERT INTO user (id, name, age) VALUES (?,?, ?)", id, model.RequestData.Name, model.RequestData.Age)
+	_, err = tx.Exec("INSERT INTO user (id, name, email) VALUES (?,?, ?)", model.RegisterData.Id, model.RegisterData.Name, model.RegisterData.Email)
 	if err != nil {
 		log.Printf("fail: tx.Exec, %v\n", err)
 		return "", err
 	}
 
-	return id, nil
+	return model.RegisterData.Id, nil
 }

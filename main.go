@@ -55,10 +55,53 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodOptions:
 		return 
+	// Login画面からGETがくる、displayNameを送り返す
 	case http.MethodGet:
 		controller.SearchUserController(w, r, db)
+	// Singup画面からPOSTがくる、データベースに保存する
 	case http.MethodPost:
 		controller.RegisterUserController(w, r, db)
+	default:
+		log.Printf("fail: HTTP Method is %s\n", r.Method)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
+
+// HomeとPost画面での処理
+func handlerTweet(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	switch r.Method {
+	case http.MethodOptions:
+		return 
+	// Home画面からGetリクエストがくる、時間、投稿内容、投稿者を返す
+	case http.MethodGet:
+		controller.GetTweetController(w, r, db)
+	// Post画面からPOSTがくる、データベースに保存する
+	case http.MethodPost:
+		controller.RegisterTweetController(w, r, db)
+	default:
+		log.Printf("fail: HTTP Method is %s\n", r.Method)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
+
+func handlerHeart(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	switch r.Method {
+	case http.MethodOptions:
+		return 
+	// Getに来たものに対してハートの状態を送信する
+	case http.MethodGet:
+		controller.GetTweetController(w, r, db)
+	// Postできたものに対してハートの状態を保存する
+	case http.MethodPost:
+		controller.RegisterTweetController(w, r, db)
 	default:
 		log.Printf("fail: HTTP Method is %s\n", r.Method)
 		w.WriteHeader(http.StatusBadRequest)
@@ -69,6 +112,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	// ② /userでリクエストされたらnameパラメーターと一致する名前を持つレコードをJSON形式で返す
 	http.HandleFunc("/user", handler)
+	http.HandleFunc("/tweet", handlerTweet)
+	http.HandleFunc("/heart", handlerHeart);
 
 	// ③ Ctrl+CでHTTPサーバー停止時にDBをクローズする
 	closeDBWithSysCall()

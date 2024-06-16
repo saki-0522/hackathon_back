@@ -9,16 +9,16 @@ import (
 )
 
 func Validation() error {
-	if model.RequestData.Name == "" {
+	if model.RegisterData.Name == "" {
 		return fmt.Errorf("name is empty")
 	}
 
-	if len(model.RequestData.Name) > 50 {
+	if len(model.RegisterData.Name) > 50 {
 		return fmt.Errorf("name is too long")
 	}
 
-	if model.RequestData.Age < 20 || model.RequestData.Age > 80 {
-		return fmt.Errorf("invalid age")
+	if len(model.RegisterData.Email) > 50 {
+		return fmt.Errorf("email is too long")
 	}
 
 	return nil
@@ -31,7 +31,7 @@ func RegisterUser(db *sql.DB) (string, error) {
 	}
 	id, err := dao.CreateUser(db)
 	if err != nil {
-		log.Printf("fail: %v\n", err)
+		log.Printf("fail: CreateUser %v\n", err)
 		return "", err
 	}
 	return id, nil
