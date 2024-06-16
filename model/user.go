@@ -42,3 +42,11 @@ var TweetPost struct {
 	Display_name string `json:"displayName`
 }
 
+// このデータの中身を考える
+type ReplyResGet struct {
+	Ini_id   string `json:"tweet_id"`
+	Name string `json:"name"`
+	Time  string    `json:"posted_at"`
+	Content  string    `json:"content"`
+}
+

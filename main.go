@@ -109,11 +109,32 @@ func handlerHeart(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handlerReply(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	switch r.Method {
+	case http.MethodOptions:
+		return 
+	// Getに来たものに対して、条件の合うリプライを全部返す
+	case http.MethodGet:
+		controller.GetReplyController(w, r, db)
+	// Postできたものに対してハートの状態を保存する
+	case http.MethodPost:
+		controller.RegisterReplyController(w, r, db)
+	default:
+		log.Printf("fail: HTTP Method is %s\n", r.Method)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
+
 func main() {
 	// ② /userでリクエストされたらnameパラメーターと一致する名前を持つレコードをJSON形式で返す
 	http.HandleFunc("/user", handler)
 	http.HandleFunc("/tweet", handlerTweet)
 	http.HandleFunc("/heart", handlerHeart);
+	http.HandleFunc("/reply", handlerReply);
 
 	// ③ Ctrl+CでHTTPサーバー停止時にDBをクローズする
 	closeDBWithSysCall()
