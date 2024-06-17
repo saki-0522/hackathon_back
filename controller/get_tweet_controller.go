@@ -11,7 +11,8 @@ import (
 
 // 関係なくすべてのtweetを取得する
 func GetTweetController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	tweets, err := usecase.GetTweet(db)
+	uid := r.URL.Query().Get("uid")
+	tweets, err := usecase.GetTweet(db, uid)
 	if err != nil {
 		log.Printf("fail: usecase.GetTweet, %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)

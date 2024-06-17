@@ -31,6 +31,8 @@ type TweetResGet struct {
 	Name string `json:"name"`
 	Time  string    `json:"posted_at"`
 	Content  string    `json:"content"`
+	Likes int `json:"likes"`
+	Heart int `json:"flag"`
 }
 
 type TweetRes struct {

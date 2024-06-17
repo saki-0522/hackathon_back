@@ -19,7 +19,7 @@ func NewTweetDAO(db *sql.DB) *TweetDAO {
 
 // tweet用に変更する
 
-func GetAllTweet(db *sql.DB) ([]model.TweetResGet, error) {
+func GetAllTweet(db *sql.DB, uid string) ([]model.TweetResGet, error) {
 	tx, err := db.Begin()
 	if err != nil {
 		log.Printf("fail: db.Begin(), %v\n", err)
@@ -31,6 +31,9 @@ func GetAllTweet(db *sql.DB) ([]model.TweetResGet, error) {
 		log.Printf("fail: tx.Query, %v\n", err)
 		return nil, err
 	}
+	defer rows.Close()
+
+	
 	
 	tweets := make([]model.TweetResGet, 0)
 	// Idはtweet_id、Nameは投稿者のID、
@@ -39,9 +42,32 @@ func GetAllTweet(db *sql.DB) ([]model.TweetResGet, error) {
 		if err := rows.Scan(&u.Id, &u.Name, &u.Time, &u.Content); err != nil {
 			return nil, err
 		}
+		var exists bool
+		err := tx.QueryRow("SELECT EXISTS (SELECT 1 FROM likes WHERE id = ? AND post_id = ?)", uid, u.Name).Scan(&exists)
+		if err != nil {
+			log.Printf("fail: tx.QueryRow, %v\n", err)
+			return nil, err
+		}
+		if exists {
+			u.Heart = 1
+		} else {
+			u.Heart = 0
+		}
+		
+		db, err := tx.Query("SELECT COUNT(*) FROM likes WHERE post_id = 'id'")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer db.Close()
+		// これは一回しか呼ばれない
+		for db.Next() {
+			if err := db.Scan(&u.Likes); err != nil {
+				return nil, err
+			}
+		}
+
 		tweets = append(tweets, u)
 	}
-	defer rows.Close()
 	return tweets, nil
 }
 
