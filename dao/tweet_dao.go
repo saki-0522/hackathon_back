@@ -42,29 +42,31 @@ func GetAllTweet(db *sql.DB, uid string) ([]model.TweetResGet, error) {
 		if err := rows.Scan(&u.Id, &u.Name, &u.Time, &u.Content); err != nil {
 			return nil, err
 		}
-		var exists bool
-		err := tx.QueryRow("SELECT EXISTS (SELECT 1 FROM likes WHERE id = ? AND post_id = ?)", uid, u.Name).Scan(&exists)
-		if err != nil {
-			log.Printf("fail: tx.QueryRow, %v\n", err)
-			return nil, err
-		}
-		if exists {
-			u.Heart = 1
-		} else {
-			u.Heart = 0
-		}
-		
-		db, err := tx.Query("SELECT COUNT(*) FROM likes WHERE post_id = 'id'")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer db.Close()
+		// db, err := tx.Query("SELECT COUNT(*) FROM likes WHERE post_id = 'id'")
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+		// defer db.Close()
+
 		// これは一回しか呼ばれない
-		for db.Next() {
-			if err := db.Scan(&u.Likes); err != nil {
-				return nil, err
-			}
-		}
+		// for db.Next() {
+			// if err := db.Scan(&u.Likes); err != nil {
+			// 	return nil, err
+			// }
+		// }
+
+		// var exists bool
+		// err2 := tx.QueryRow("SELECT EXISTS (SELECT 1 FROM likes WHERE id = ? AND post_id = ?)", uid, u.Name).Scan(&exists)
+		// if err2 != nil {
+		// 	log.Printf("fail: tx.QueryRow, %v\n", err2)
+		// 	return nil, err2
+		// }
+		// if exists {
+		// 	u.Heart = 1
+		// } else {
+		// 	u.Heart = 0
+		// }
+		
 
 		tweets = append(tweets, u)
 	}
