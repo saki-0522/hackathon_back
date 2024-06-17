@@ -17,6 +17,7 @@ func NewReplyDAO(db *sql.DB) *ReplyDAO {
 	return &ReplyDAO{DB: db}
 }
 
+// func GetReplyById(db *sql.DB, ini_tweet_id string, posted_by string) ([]model.ReplyResGet, error) {
 func GetReplyById(db *sql.DB, ini_tweet_id string) ([]model.ReplyResGet, error) {
 	tx, err := db.Begin()
 	if err != nil {
@@ -36,7 +37,7 @@ func GetReplyById(db *sql.DB, ini_tweet_id string) ([]model.ReplyResGet, error) 
 	for rows.Next() {
 		var u model.ReplyResGet
 		// ここの生身も状態によって変更する
-		if err := rows.Scan(&u.Id, &u.Name, &u.Time, &u.Content); err != nil {
+		if err := rows.Scan(&u.Display_name, &u.Time, &u.Content); err != nil {
 			return nil, err
 		}
 		replies = append(replies, u)
@@ -57,14 +58,14 @@ func CreateReply(db *sql.DB) (string, error) {
 	// IDの生成
 	t := time.Now()
 	entropy := ulid.Monotonic(rand.New(rand.NewSource(t.UnixNano())), 0)
-	tweet_id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
+	reply_id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
 
 	// ここ何やっているのか、ここに入れるのかえる
-	_, err = tx.Exec("INSERT INTO reply (ini_tweet_id, ini_posted_by, ini_content, content, display_name, posted_by, posted_at) VALUES (?, ?, ?, ?, ?, ?, ?)", tweet_id, model.TweetPost.Name, t, model.TweetPost.Content, model.TweetPost.DisplayName)
+	_, err = tx.Exec("INSERT INTO reply (ini_tweet_id, ini_posted_by, reply_content, display_name, posted_by, posted_at, reply_id) VALUES (?, ?, ?, ?, ?, ?, ?)", model.ReplyPost.Ini_tweet_id, model.ReplyPost.Name, model.ReplyPost.Content, model.ReplyPost.Display_name, t, reply_id)
 	if err != nil {
 		log.Printf("fail: tx.Exec, %v\n", err)
 		return "", err
 	}
 // 多分ここで返されている値が違う
-	return model.TweetPost.Content, nil
+	return model.ReplyPost.Content, nil
 }

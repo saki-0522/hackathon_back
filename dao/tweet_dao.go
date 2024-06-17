@@ -61,7 +61,7 @@ func CreateTweet(db *sql.DB) (string, error) {
 	tweet_id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
 
 	// ここ何やっているのか
-	_, err = tx.Exec("INSERT INTO tweet (tweet_id, posted_by, posted_at, content, displayName) VALUES (?, ?, ?, ?, ?)", tweet_id, model.TweetPost.Name, t, model.TweetPost.Content, model.TweetPost.DisplayName)
+	_, err = tx.Exec("INSERT INTO tweet (tweet_id, posted_by, posted_at, content, display_name) VALUES (?, ?, ?, ?, ?)", tweet_id, model.TweetPost.Name, t, model.TweetPost.Content, model.TweetPost.Display_name)
 	if err != nil {
 		log.Printf("fail: tx.Exec, %v\n", err)
 		return "", err

@@ -6,7 +6,7 @@ import (
 	"db/controller"
 	"db/dao"
 	"fmt"
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -20,10 +20,10 @@ var userDao *dao.UserDAO
 
 func init() {
 	// Load environment variables from .env file
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Fatalf("Error loading .env file: %v", err)
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
 	// // ①-1
 	mysqlUser := os.Getenv("MYSQL_USER")
     mysqlPwd := os.Getenv("MYSQL_PWD")
@@ -98,10 +98,11 @@ func handlerHeart(w http.ResponseWriter, r *http.Request) {
 		return 
 	// Getに来たものに対してハートの状態を送信する
 	case http.MethodGet:
-		controller.GetTweetController(w, r, db)
+		// controller.GetHeartController(w, r, db)
+		return
 	// Postできたものに対してハートの状態を保存する
 	case http.MethodPost:
-		controller.RegisterTweetController(w, r, db)
+		controller.RegisterLikeController(w, r, db)
 	default:
 		log.Printf("fail: HTTP Method is %s\n", r.Method)
 		w.WriteHeader(http.StatusBadRequest)
