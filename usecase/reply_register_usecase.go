@@ -9,17 +9,17 @@ import (
 )
 
 func ReplyValidation() error {
-	// if model.ReplyPost.Name == "" {
-	// 	return fmt.Errorf("name is empty")
-	// }
+	if model.ReplyPost.Name == "" {
+		return fmt.Errorf("name is empty")
+	}
 
-	// if len(model.ReplyPost.Name) > 50 {
-	// 	return fmt.Errorf("name is too long")
-	// }
+	if len(model.ReplyPost.Name) > 50 {
+		return fmt.Errorf("name is too long")
+	}
 
-	// if len(model.ReplyPost.reply_content) > 200 {
-	// 	return fmt.Errorf("reply_content is too long")
-	// }
+	if len(model.ReplyPost.reply_content) > 200 {
+		return fmt.Errorf("reply_content is too long")
+	}
 
 	return nil
 }

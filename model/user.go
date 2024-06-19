@@ -86,3 +86,14 @@ var Like struct {
 	Post_id string `json:"post_id"`
 	Id string `json:"id"`
 }
+
+type ReplyReturn {
+	Id   string `json:"tweet_id"`
+	Name string `json:"name"`
+	Time  string    `json:"posted_at"`
+	Content  string    `json:"content"`
+	Likes int `json:"like_count"`
+	Status int `json:"status"`
+	Parent_Id string `json:"parent_id"`
+	Display_name string `json:"display_name"`
+}
