@@ -45,6 +45,7 @@ func GetTweet(db *sql.DB, uid string) ([]model.TweetReturn, error) {
 			Likes:   tweet.Likes,
 			Status:  status,
 			Parent_Id: tweet.Parent_Id,
+			Display_name: tweet.Display_name,
 		}
 	
 		tweet_ret = append(tweet_ret, tweetReturn)

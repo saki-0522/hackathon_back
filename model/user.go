@@ -1,7 +1,7 @@
 package model
 
 import (
-	"time"
+	// "time"
 )
 
 type UserResForHTTPGet struct {
@@ -34,6 +34,7 @@ type TweetResGet struct {
 	Content  string    `json:"content"`
 	Likes int `json:"like_count"`
 	Parent_Id string `json:"parent_id"`
+	Display_name string `json:"display_name"`
 }
 
 type TweetReturn struct {
@@ -44,6 +45,7 @@ type TweetReturn struct {
 	Likes int `json:"like_count"`
 	Status int `json:"status"`
 	Parent_Id string `json:"parent_id"`
+	Display_name string `json:"display_name"`
 }
 
 type TweetRes struct {
@@ -56,21 +58,27 @@ type TweetRes struct {
 var TweetPost struct {
 	Name string `json:"posted_by"`
 	Content  string    `json:"content"`
+	Display_name string `json:"display_name"`
 }
 
 // このデータの中身を考える
 type ReplyResGet struct {
-	Display_name   string `json:"display_name"`
-	Time  time.Time    `json:"posted_at"`
-	Content  string    `json:"reply_content"`
+	Id   string `json:"tweet_id"`
+	Name string `json:"name"`
+	Time  string    `json:"posted_at"`
+	Content  string    `json:"content"`
+	Likes int `json:"like_count"`
+	Status int `json:"status"`
+	Parent_Id string `json:"parent_id"`
+	Display_name string `json:"display_name"`
 }
 
 // Replyを登録するときに、フロントから受け取る値たち
 var ReplyPost struct {
 	Name string `json:"posted_by"`
 	Content  string    `json:"reply_content"`
-	Ini_tweet_id string `json:"ini_tweet_id"`
 	Display_name string `json:"display_name"`
+	Parent_Id string `json:"parent_id"`
 }
 
 // likes tableに入力する値

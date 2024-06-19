@@ -17,15 +17,15 @@ func NewReplyDAO(db *sql.DB) *ReplyDAO {
 	return &ReplyDAO{DB: db}
 }
 
-// func GetReplyById(db *sql.DB, ini_tweet_id string, posted_by string) ([]model.ReplyResGet, error) {
-func GetReplyById(db *sql.DB, ini_tweet_id string) ([]model.ReplyResGet, error) {
+// func GetReplyById(db *sql.DB, parent_id string, posted_by string) ([]model.ReplyResGet, error) {
+func GetReplyById(db *sql.DB, parent_id string) ([]model.ReplyResGet, error) {
 	tx, err := db.Begin()
 	if err != nil {
 		log.Printf("fail: db.Begin(), %v\n", err)
 		return nil, err
 	}
 	defer HandleTransaction(tx, err)
-	rows, err := tx.Query("SELECT * FROM reply WHERE ini_tweet_id = ?", ini_tweet_id)
+	rows, err := tx.Query("SELECT * FROM tweet WHERE parent_id = ?", parent_id)
 	if err != nil {
 		log.Printf("fail: tx.Query, %v\n", err)
 		return nil, err
@@ -33,11 +33,9 @@ func GetReplyById(db *sql.DB, ini_tweet_id string) ([]model.ReplyResGet, error) 
 	defer rows.Close()
 	
 	replies := make([]model.ReplyResGet, 0)
-	// Idはtweet_id、Nameは投稿者のID、
 	for rows.Next() {
 		var u model.ReplyResGet
-		// ここの生身も状態によって変更する
-		if err := rows.Scan(&u.Display_name, &u.Time, &u.Content); err != nil {
+		if err := rows.Scan(&u.Id, &u.Name, &u.Time, &u.Content, &u.Likes, &u.Parent_Id, &u.Display_name); err != nil {
 			return nil, err
 		}
 		replies = append(replies, u)
@@ -61,11 +59,13 @@ func CreateReply(db *sql.DB) (string, error) {
 	reply_id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
 
 	// ここ何やっているのか、ここに入れるのかえる
-	_, err = tx.Exec("INSERT INTO reply (ini_tweet_id, ini_posted_by, reply_content, display_name, posted_by, posted_at, reply_id) VALUES (?, ?, ?, ?, ?, ?, ?)", model.ReplyPost.Ini_tweet_id, model.ReplyPost.Name, model.ReplyPost.Content, model.ReplyPost.Display_name, t, reply_id)
+	_, err = tx.Exec("INSERT INTO tweet (tweet_id, posted_by, posted_at, content, display_name, parent_id) VALUES (?, ?, ?, ?, ?, ?)", reply_id, model.ReplyPost.Name, t, model.ReplyPost.Content, model.ReplyPost.Display_name, model.ReplyPost.Parent_Id)
 	if err != nil {
 		log.Printf("fail: tx.Exec, %v\n", err)
 		return "", err
 	}
 // 多分ここで返されている値が違う
+	log.Printf("CreateReply")
+	log.Println(model.ReplyPost)
 	return model.ReplyPost.Content, nil
 }

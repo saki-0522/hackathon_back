@@ -12,17 +12,18 @@ import (
 func RegisterReplyController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&model.TweetPost); err != nil {
+	if err := decoder.Decode(&model.ReplyPost); err != nil {
 		log.Printf("fail: json.Decode, %v\n", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	log.Println(model.TweetPost)
+	log.Println(model.ReplyPost)
 
-	id, err := usecase.RegisterTweet(db)
+	id, err := usecase.RegisterReply(db)
+	log.Printf("RegisterReplyController")
 	log.Println(id)
 	if err != nil {
-		log.Printf("fail: RegisterTweet %n\n", err)
+		log.Printf("fail: RegisterReply %n\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 

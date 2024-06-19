@@ -11,20 +11,13 @@ import (
 
 // 関係なくすべてのtweetを取得する
 func GetReplyController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	ini_tweet_id := r.URL.Query().Get("ini_tweet_id")
-	// posted_by := r.URL.Query().Get("posted_by")
-	if ini_tweet_id == "" {
-		log.Println("fail: ini_tweet_id is empty")
+	parent_id := r.URL.Query().Get("parent_id")
+	if parent_id == "" {
+		log.Println("fail: parent_id is empty")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	// if posted_by == "" {
-	// 	log.Println("fail: ini_tweet_id is empty")
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	return
-	// }
-	// replies, err := usecase.GetReply(db, ini_tweet_id, posted_by)
-	replies, err := usecase.GetReply(db, ini_tweet_id)
+	replies, err := usecase.GetReply(db, parent_id)
 	if err != nil {
 		log.Printf("fail: usecase.GetReply, %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)

@@ -62,7 +62,7 @@ func GetAllTweet(db *sql.DB) ([]model.TweetResGet, error) {
 	// Idはtweet_id、Nameは投稿者のID、
 	for rows.Next() {
 		var u model.TweetResGet
-		if err := rows.Scan(&u.Id, &u.Name, &u.Time, &u.Content, &u.Likes, &u.Parent_Id); err != nil {
+		if err := rows.Scan(&u.Id, &u.Name, &u.Time, &u.Content, &u.Likes, &u.Parent_Id, &u.Display_name); err != nil {
 			return nil, err
 		}
 		tweets = append(tweets, u)
@@ -86,7 +86,7 @@ func CreateTweet(db *sql.DB) (string, error) {
 	tweet_id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
 
 	// ここ何やっているのか
-	_, err = tx.Exec("INSERT INTO tweet (tweet_id, posted_by, posted_at, content) VALUES (?, ?, ?, ?)", tweet_id, model.TweetPost.Name, t, model.TweetPost.Content)
+	_, err = tx.Exec("INSERT INTO tweet (tweet_id, posted_by, posted_at, content, display_name) VALUES (?, ?, ?, ?, ?)", tweet_id, model.TweetPost.Name, t, model.TweetPost.Content, model.TweetPost.Display_name)
 	if err != nil {
 		log.Printf("fail: tx.Exec, %v\n", err)
 		return "", err

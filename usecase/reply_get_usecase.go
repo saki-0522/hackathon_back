@@ -7,10 +7,10 @@ import (
 	"log"
 )
 
-// func GetReply(db *sql.DB, ini_tweet_id string, posted_by string) ([]model.ReplyResGet, error) {
-func GetReply(db *sql.DB, ini_tweet_id string) ([]model.ReplyResGet, error) {
-	// users, err := dao.GetReplyById(db, ini_tweet_id, posted_by)
-	users, err := dao.GetReplyById(db, ini_tweet_id)
+// func GetReply(db *sql.DB, parent_id string, posted_by string) ([]model.ReplyResGet, error) {
+func GetReply(db *sql.DB, parent_id string) ([]model.ReplyResGet, error) {
+	// users, err := dao.GetReplyById(db, parent_id, posted_by)
+	users, err := dao.GetReplyById(db, parent_id)
 	if err != nil {
 		log.Printf("fail: GetReplyById, %v\n", err)
 		return nil, err
