@@ -26,13 +26,22 @@ var RegisterData struct {
 	Id string `json:"uid"`
 }
 
+// tweetの情報をsqlから受け取る
 type TweetResGet struct {
 	Id   string `json:"tweet_id"`
 	Name string `json:"name"`
 	Time  string    `json:"posted_at"`
 	Content  string    `json:"content"`
-	// Likes int `json:"likes"`
-	// Heart int `json:"flag"`
+	Likes int `json:"like_count"`
+}
+
+type TweetReturn struct {
+	Id   string `json:"tweet_id"`
+	Name string `json:"name"`
+	Time  string    `json:"posted_at"`
+	Content  string    `json:"content"`
+	Likes int `json:"like_count"`
+	Status int `json:"status"`
 }
 
 type TweetRes struct {
