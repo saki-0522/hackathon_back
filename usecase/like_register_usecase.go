@@ -36,3 +36,12 @@ func RegisterLike(db *sql.DB) (string, error) {
 	}
 	return id, nil
 }
+
+func RegisterLike(db *sql.DB) (string, error) {
+	id, err := dao.DeleteLike(db)
+	if err != nil {
+		log.Printf("fail: %v\n", err)
+		return "", err
+	}
+	return id, nil
+}

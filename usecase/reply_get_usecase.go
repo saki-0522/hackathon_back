@@ -19,12 +19,12 @@ import (
 // }
 
 func GetReply(db *sql.DB, parent_id string, uid string) ([]model.ReplyReturn, error) {
-	replies, err := dao.GetAllReplyById(db)
+	replies, err := dao.GetAllReplyById(db, parent_id)
 	if err != nil {
 		log.Printf("fail: GetAllReply, %v\n", err)
 		return nil, err
 	}
-	likes, err := dao.GetStatusById(db, uid)
+	likes, err := dao.GetReplyStatusById(db, parent_id, uid)
 	if err != nil {
 		log.Printf("fail: GetStatusById, %v\n", err)
 		return nil, err
