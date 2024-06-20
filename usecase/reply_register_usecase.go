@@ -3,8 +3,8 @@ package usecase
 import (
 	"database/sql"
 	"db/dao"
-	// "db/model"
-	// "fmt"
+	"db/model"
+	"fmt"
 	"log"
 )
 
@@ -17,7 +17,7 @@ func ReplyValidation() error {
 		return fmt.Errorf("name is too long")
 	}
 
-	if len(model.ReplyPost.reply_content) > 200 {
+	if len(model.ReplyPost.Content) > 200 {
 		return fmt.Errorf("reply_content is too long")
 	}
 

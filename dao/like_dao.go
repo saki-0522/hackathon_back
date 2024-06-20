@@ -29,6 +29,12 @@ func CreateLike(db *sql.DB) (string, error) {
 		return "", err
 	}
 
+	_, err = tx.Exec("UPDATE tweet SET like_count = like_count + 1 WHERE tweet_id = ?", model.Like.Post_id)
+	if err != nil {
+		log.Printf("fail: tx.Exec, %v\n", err)
+		return "", err
+	}
+
 	return model.Like.Id, nil
 }
 
@@ -42,6 +48,12 @@ func DeleteLike(db *sql.DB) (string, error) {
 	defer HandleTransaction(tx, err)
 
 	_, err = tx.Exec("DELETE FROM likes WHERE post_id = ? AND id = ? AND parent_id = ?", model.Like.Post_id, model.Like.Id, model.Like.Parent_Id)
+	if err != nil {
+		log.Printf("fail: tx.Exec, %v\n", err)
+		return "", err
+	}
+
+	_, err = tx.Exec("UPDATE tweet SET like_count = like_count - 1 WHERE tweet_id = ?", model.Like.Post_id)
 	if err != nil {
 		log.Printf("fail: tx.Exec, %v\n", err)
 		return "", err

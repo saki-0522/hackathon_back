@@ -6,7 +6,7 @@ import (
 	"db/controller"
 	"db/dao"
 	"fmt"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -20,10 +20,10 @@ var userDao *dao.UserDAO
 
 func init() {
 	// Load environment variables from .env file
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatalf("Error loading .env file: %v", err)
+	// }
 	// // ①-1
 	mysqlUser := os.Getenv("MYSQL_USER")
     mysqlPwd := os.Getenv("MYSQL_PWD")
@@ -96,11 +96,11 @@ func handlerHeart(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodOptions:
 		return 
-	// Getに来たものに対してハートの状態を送信する
+	// Getに来るものは今のところない
 	case http.MethodGet:
 		// controller.GetHeartController(w, r, db)
 		return
-	// Postできたものに対してハートの状態を保存する
+	// Heartが押されたら
 	case http.MethodPost:
 		controller.RegisterLikeController(w, r, db)
 	default:

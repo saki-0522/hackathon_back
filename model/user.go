@@ -76,7 +76,7 @@ type ReplyResGet struct {
 // Replyを登録するときに、フロントから受け取る値たち
 var ReplyPost struct {
 	Name string `json:"posted_by"`
-	Content  string    `json:"reply_content"`
+	Content  string    `json:"content"`
 	Display_name string `json:"display_name"`
 	Parent_Id string `json:"parent_id"`
 }
@@ -94,7 +94,7 @@ var Delete struct {
 	Id string `json:"id"`
 }
 
-type ReplyReturn {
+type ReplyReturn struct {
 	Id   string `json:"tweet_id"`
 	Name string `json:"name"`
 	Time  string    `json:"posted_at"`

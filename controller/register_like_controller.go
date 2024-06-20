@@ -40,8 +40,14 @@ import (
 
 func RegisterLikeController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	status := r.URL.Query().Get("status")
-	if uid == "" {
+	uid := r.URL.Query().Get("uid")
+	if status == "" {
 		log.Println("fail: status is empty")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	if uid == "" {
+		log.Println("fail: uid is empty")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -54,25 +60,22 @@ func RegisterLikeController(w http.ResponseWriter, r *http.Request, db *sql.DB) 
 
 	log.Println(model.Like)
 
-	// idを定義してないから怒られるかも
-	if status == 0
-	{
-		id, err := usecase.RegisterLike(db)
+	var id string
+	var err error
+	if (status == "0"){
+		id, err = usecase.RegisterLike(db)
 		if err != nil {
 			log.Printf("fail: %n\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-	}
-	else
-	{
-		id, err := usecase.DeleteLike(db)
+	} else{
+		id, err = usecase.DeleteLike(db)
 		if err != nil {
 			log.Printf("fail: %n\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 	
-
 	// 成功した場合のレスポンス
 	w.WriteHeader(http.StatusOK)
 	response := map[string]string{"id": id}

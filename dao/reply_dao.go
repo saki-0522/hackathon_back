@@ -43,7 +43,7 @@ func NewReplyDAO(db *sql.DB) *ReplyDAO {
 // 	return replies, nil
 // }
 
-func GetStatusById(db *sql.DB, parent_id string, uid string) ([]string, error) {
+func GetReplyStatusById(db *sql.DB, parent_id string, uid string) ([]string, error) {
 	tx, err := db.Begin()
 	if err != nil {
 		log.Printf("fail: db.Begin(), %v\n", err)
