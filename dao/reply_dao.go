@@ -66,6 +66,7 @@ func GetReplyStatusById(db *sql.DB, parent_id string, uid string) ([]string, err
 		}
 		status = append(status, tmp)
 	}
+	log.Println(status)
 	return status ,nil
 }
 
