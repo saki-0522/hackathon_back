@@ -35,6 +35,8 @@ func GetReply(db *sql.DB, parent_id string, uid string) ([]model.ReplyReturn, er
 		likesMap[id] = true
 	}
 
+	log.Printf("mappppp")
+	log.Println(likesMap)
 	var reply_ret []model.ReplyReturn
 	for _, reply := range replies {
 		var status int
@@ -43,6 +45,7 @@ func GetReply(db *sql.DB, parent_id string, uid string) ([]model.ReplyReturn, er
 		} else {
 			status = 0
 		}
+
 	
 		// replyReturn を作成して新しい配列に追加する
 		replyReturn := model.ReplyReturn{

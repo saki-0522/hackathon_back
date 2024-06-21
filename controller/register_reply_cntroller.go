@@ -17,11 +17,9 @@ func RegisterReplyController(w http.ResponseWriter, r *http.Request, db *sql.DB)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	log.Println(model.ReplyPost)
 
 	id, err := usecase.RegisterReply(db)
 	log.Printf("RegisterReplyController")
-	log.Println(id)
 	if err != nil {
 		log.Printf("fail: RegisterReply %n\n", err)
 		w.WriteHeader(http.StatusInternalServerError)

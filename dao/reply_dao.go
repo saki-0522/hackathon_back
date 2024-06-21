@@ -119,6 +119,6 @@ func CreateReply(db *sql.DB) (string, error) {
 	}
 // 多分ここで返されている値が違う
 	log.Printf("CreateReply")
-	log.Println(model.ReplyPost)
+	// log.Println(model.ReplyPost)
 	return model.ReplyPost.Content, nil
 }

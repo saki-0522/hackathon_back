@@ -58,7 +58,7 @@ func RegisterLikeController(w http.ResponseWriter, r *http.Request, db *sql.DB) 
 		return
 	}
 
-	log.Println(model.Like)
+	// log.Println(model.Like)
 
 	var id string
 	var err error

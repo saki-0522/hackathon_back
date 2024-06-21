@@ -19,7 +19,6 @@ var db *sql.DB
 var userDao *dao.UserDAO
 
 func init() {
-	// Load environment variables from .env file
 	// err := godotenv.Load()
 	// if err != nil {
 	// 	log.Fatalf("Error loading .env file: %v", err)
@@ -119,12 +118,35 @@ func handlerReply(w http.ResponseWriter, r *http.Request) {
 		return 
 	// Getに来たものに対して、条件の合うリプライを全部返す
 	case http.MethodGet:
-		controller.GetReplyController(w, r, db)
+		controller.SearchController(w, r, db)
+	// Postできたものに対してハートの状態を保存する
+	case http.MethodPost:
+		return 
+		// log.Printf("post")
+		// controller.RegisterReplyController(w, r, db)
+	default:
+		log.Printf("fail: HTTP Method is %s\n", r.Method)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
+
+func handlerSearchTweet(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	switch r.Method {
+	case http.MethodOptions:
+		return 
+	// Getに来たものに対して、条件の合うリプライを全部返す
+	case http.MethodGet:
+		controller.SearchController(w, r, db)
 		log.Printf("register")
 	// Postできたものに対してハートの状態を保存する
 	case http.MethodPost:
-		log.Printf("post")
-		controller.RegisterReplyController(w, r, db)
+		return
+		// log.Printf("post")
+		// controller.RegisterReplyController(w, r, db)
 	default:
 		log.Printf("fail: HTTP Method is %s\n", r.Method)
 		w.WriteHeader(http.StatusBadRequest)
@@ -138,6 +160,7 @@ func main() {
 	http.HandleFunc("/tweet", handlerTweet)
 	http.HandleFunc("/heart", handlerHeart);
 	http.HandleFunc("/reply", handlerReply);
+	http.HandleFunc("/tweet/search", handlerSearchTweet);
 
 	// ③ Ctrl+CでHTTPサーバー停止時にDBをクローズする
 	closeDBWithSysCall()

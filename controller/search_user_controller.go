@@ -15,7 +15,7 @@ func SearchUserController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	log.Println(uid)
+	// log.Println(uid)
 	user, err := usecase.SearchUser(db, uid)
 	if err != nil {
 		log.Printf("fail: usecase.SearchUser, %v\n", err)

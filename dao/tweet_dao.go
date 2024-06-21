@@ -41,7 +41,7 @@ func GetStatusById(db *sql.DB, uid string) ([]string, error) {
 		}
 		status = append(status, tmp)
 	}
-	log.Println(status)
+	// log.Println(status)
 	return status ,nil
 }
 

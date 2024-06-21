@@ -18,10 +18,10 @@ func RegisterUserController(w http.ResponseWriter, r *http.Request, db *sql.DB) 
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	log.Println(model.RegisterData)
+	// log.Println(model.RegisterData)
 
 	id, err := usecase.RegisterUser(db)
-	log.Println(id)
+	// log.Println(id)
 	if err != nil {
 		log.Printf("fail: RegisterUser %n\n", err)
 		w.WriteHeader(http.StatusInternalServerError)

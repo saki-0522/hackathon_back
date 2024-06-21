@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	// "db/model"
 )
 
 // 関係なくすべてのtweetを取得する
