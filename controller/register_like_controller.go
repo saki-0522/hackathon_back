@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // func RegisterLikeController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
@@ -39,18 +40,21 @@ import (
 // }
 
 func RegisterLikeController(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	status := r.URL.Query().Get("status")
+	statusStr := r.URL.Query().Get("status")
+	status, err1 := strconv.Atoi(statusStr)
 	uid := r.URL.Query().Get("uid")
-	if status == "" {
-		log.Println("fail: status is empty")
+	if err1 != nil {
+		log.Println("Invalid status value")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	log.Println(uid)
 	if uid == "" {
 		log.Println("fail: uid is empty")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	log.Printf("test");
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&model.Like); err != nil {
 		log.Printf("fail: json.Decode, %v\n", err)
@@ -58,11 +62,10 @@ func RegisterLikeController(w http.ResponseWriter, r *http.Request, db *sql.DB) 
 		return
 	}
 
-	// log.Println(model.Like)
 
 	var id string
 	var err error
-	if (status == "0"){
+	if (status == 0){
 		id, err = usecase.RegisterLike(db)
 		if err != nil {
 			log.Printf("fail: %n\n", err)

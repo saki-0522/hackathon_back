@@ -84,8 +84,8 @@ var ReplyPost struct {
 // likes tableに入力する値
 var Like struct {
 	Post_id string `json:"post_id"`
-	Parent_Id string `json:"parent_id"`
 	Id string `json:"id"`
+	Parent_Id string `json:"parent_id"`
 }
 
 var Delete struct {
@@ -104,4 +104,3 @@ type ReplyReturn struct {
 	Parent_Id string `json:"parent_id"`
 	Display_name string `json:"display_name"`
 }
-
