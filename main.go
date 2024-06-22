@@ -119,11 +119,10 @@ func handlerReply(w http.ResponseWriter, r *http.Request) {
 	// Getに来たものに対して、条件の合うリプライを全部返す
 	case http.MethodGet:
 		controller.GetReplyController(w, r, db)
-	// Postできたものに対してハートの状態を保存する
 	case http.MethodPost:
-		return 
+		// return 
 		// log.Printf("post")
-		// controller.RegisterReplyController(w, r, db)
+		controller.RegisterReplyController(w, r, db)
 	default:
 		log.Printf("fail: HTTP Method is %s\n", r.Method)
 		w.WriteHeader(http.StatusBadRequest)
