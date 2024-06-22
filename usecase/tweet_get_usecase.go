@@ -36,8 +36,8 @@ func GetTweet(db *sql.DB, uid string) ([]model.TweetReturn, error) {
 			status = 0
 		}
 	
-		log.Printf("mappppp")
-		log.Println(likesMap)
+		// log.Printf("mappppp")
+		// log.Println(likesMap)
 		// TweetReturn を作成して新しい配列に追加する
 		tweetReturn := model.TweetReturn{
 			Id:      tweet.Id,

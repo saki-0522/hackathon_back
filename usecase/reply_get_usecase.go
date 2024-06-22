@@ -35,8 +35,8 @@ func GetReply(db *sql.DB, parent_id string, uid string) ([]model.ReplyReturn, er
 		likesMap[id] = true
 	}
 
-	log.Printf("mappppp")
-	log.Println(likesMap)
+	// log.Printf("mappppp")
+	// log.Println(likesMap)
 	var reply_ret []model.ReplyReturn
 	for _, reply := range replies {
 		var status int
