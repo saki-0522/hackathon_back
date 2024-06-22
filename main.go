@@ -6,7 +6,7 @@ import (
 	"db/controller"
 	"db/dao"
 	"fmt"
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -19,10 +19,10 @@ var db *sql.DB
 var userDao *dao.UserDAO
 
 func init() {
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Fatalf("Error loading .env file: %v", err)
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
 	// // ①-1
 	mysqlUser := os.Getenv("MYSQL_USER")
     mysqlPwd := os.Getenv("MYSQL_PWD")
@@ -118,7 +118,7 @@ func handlerReply(w http.ResponseWriter, r *http.Request) {
 		return 
 	// Getに来たものに対して、条件の合うリプライを全部返す
 	case http.MethodGet:
-		controller.SearchController(w, r, db)
+		controller.GetReplyController(w, r, db)
 	// Postできたものに対してハートの状態を保存する
 	case http.MethodPost:
 		return 
