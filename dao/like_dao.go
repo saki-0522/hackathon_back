@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"db/model"
 	"log"
+	"math/rand"
+	"time"
+	"github.com/oklog/ulid/v2"
 )
 
 type LikeDAO struct {
@@ -23,7 +26,11 @@ func CreateLike(db *sql.DB) (string, error) {
 	}
 	defer HandleTransaction(tx, err)
 
-	_, err = tx.Exec("INSERT INTO likes (post_id, id, parent_id) VALUES (?, ?, ?)", model.Like.Post_id, model.Like.Id, model.Like.Parent_Id)
+	t := time.Now()
+	entropy := ulid.Monotonic(rand.New(rand.NewSource(t.UnixNano())), 0)
+	id := ulid.MustNew(ulid.Timestamp(t), entropy).String()
+
+	_, err = tx.Exec("INSERT INTO likes (post_id, id, parent_id, like_id) VALUES (?, ?, ?, ?)", model.Like.Post_id, model.Like.Id, model.Like.Parent_Id, id)
 	if err != nil {
 		log.Printf("fail: tx.Exec, %v\n", err)
 		return "", err
